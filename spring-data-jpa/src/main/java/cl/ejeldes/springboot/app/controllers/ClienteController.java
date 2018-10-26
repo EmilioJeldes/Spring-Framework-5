@@ -29,6 +29,7 @@ import java.util.UUID;
 public class ClienteController {
 
 
+    private static final String UPLOADS_FOLDER = "uploads";
     private ClienteService clienteService;
 
     @Autowired
@@ -111,7 +112,7 @@ public class ClienteController {
             if (cliente.getId() != null && cliente.getId() > 0
                     && cliente.getFoto() != null && cliente.getFoto().length() > 0) {
 
-                Path rootPath = Paths.get("uploads").resolve(cliente.getFoto()).toAbsolutePath();
+                Path rootPath = Paths.get(UPLOADS_FOLDER).resolve(cliente.getFoto()).toAbsolutePath();
                 File archivo = rootPath.toFile();
 
                 if (archivo.exists() && archivo.canRead()) {
@@ -122,7 +123,7 @@ public class ClienteController {
             }
 
             String uniqueFileName = UUID.randomUUID().toString() + "_" + foto.getOriginalFilename();
-            Path absoluteRootPath = Paths.get("uploads").resolve(uniqueFileName).toAbsolutePath();
+            Path absoluteRootPath = Paths.get(UPLOADS_FOLDER).resolve(uniqueFileName).toAbsolutePath();
             try {
                 Files.copy(foto.getInputStream(), absoluteRootPath);
                 flash.addFlashAttribute("info", "Has subido correctamente" + uniqueFileName);
@@ -151,7 +152,7 @@ public class ClienteController {
             clienteService.delete(id);
             flash.addFlashAttribute("success", "Cliente eliminado con exito");
 
-            Path rootPath = Paths.get("uploads").resolve(cliente.getFoto()).toAbsolutePath();
+            Path rootPath = Paths.get(UPLOADS_FOLDER).resolve(cliente.getFoto()).toAbsolutePath();
             File archivo = rootPath.toFile();
 
             if (archivo.exists() || archivo.canRead()) {
